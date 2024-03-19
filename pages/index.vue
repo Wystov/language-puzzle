@@ -1,3 +1,10 @@
 <template>
-  <h1>hi</h1>
+  <main class="flex flex-col justify-center items-center">
+    <AppLogin v-if="!store.user" />
+    <AppWelcome v-else />
+  </main>
 </template>
+
+<script setup lang="ts">
+import { store } from "~/store";
+</script>

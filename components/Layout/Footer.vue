@@ -1,0 +1,11 @@
+<template>
+  <footer>
+    <NuxtLink
+      href="https://github.com/Wystov"
+      target="_blank"
+      class="hover:text-zinc-300"
+    >
+      Github
+    </NuxtLink>
+  </footer>
+</template>
