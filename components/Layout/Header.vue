@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { store } from "~/store";
-import { lsKeys } from "~/constants";
+import { lsKeys } from "~/config/constants";
 
 const navItems = [
   {
@@ -53,3 +53,4 @@ const logout = () => {
   @apply text-green-500;
 }
 </style>
+~/constants/constants

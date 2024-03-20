@@ -1,9 +1,27 @@
-type Round = {
-  levelData: Record<string, string>;
-  words: [Record<string, string> & { id: number }];
+type LevelData = {
+  id: string;
+  name: string;
+  imageSrc: string;
+  cutSrc: string;
+  author: string;
+  year: string;
 };
 
-export type LvlData = {
+type Word = {
+  audioExample: string;
+  textExample: string;
+  textExampleTranslate: string;
+  id: number;
+  word: string;
+  wordTranslate: string;
+};
+
+export type Round = {
+  levelData: LevelData;
+  words: Word[];
+};
+
+export type Data = {
   rounds: Round[];
   roundsCount: number;
 };

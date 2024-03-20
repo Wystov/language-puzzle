@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { lsKeys } from "~/constants";
+import { lsKeys } from "~/config/constants";
 import { store } from "~/store";
 
 const name = ref("");
@@ -30,3 +30,4 @@ const submitInput = () => {
   navigateTo(`/game`);
 };
 </script>
+~/constants/constants
