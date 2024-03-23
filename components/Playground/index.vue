@@ -2,39 +2,28 @@
   <p class="mt-10 p-2 text-center bg-slate-500 rounded-md">
     {{ textToTranslate }}
   </p>
-  <draggable
-    tag="div"
-    class="flex mt-5"
-    :list="pickFrom"
-    item-key="word"
-    group="words"
-  >
-    <template #item="{ element: word, index }">
-      <div class="p-2 cursor-pointer" @click="moveWord(index)">
-        {{ word }}
-      </div>
-    </template>
-  </draggable>
+  <PlaygroundPuzzleRow
+    v-if="pickFrom.length"
+    :words="pickFrom"
+    @move-word="moveWord"
+  />
+  <div v-else class="flex justify-center gap-2 mt-5">
+    <button class="px-2 py-1 bg-slate-700 rounded hover:bg-slate-600">
+      Check
+    </button>
+  </div>
   <div class="flex flex-col mt-5 w-full">
     <div
       v-for="(phrase, i) in round.words"
       :key="phrase.id"
       class="h-10 bg-slate-400"
     >
-      <draggable
+      <PlaygroundPuzzleRow
         v-if="i === currentIndex"
-        tag="div"
-        :list="result"
-        item-key="word"
-        class="flex"
-        group="words"
-      >
-        <template #item="{ element: word, index }">
-          <div class="p-2 cursor-pointer" @click="moveWord(index, true)">
-            {{ word }}
-          </div></template
-        >
-      </draggable>
+        :words="result"
+        @move-word="moveWord"
+        reverse
+      />
     </div>
   </div>
 </template>
@@ -42,7 +31,6 @@
 <script setup lang="ts">
 import type { Round } from "~/config/types";
 import { shuffle } from "~/utils/shuffleArray";
-import draggable from "vuedraggable";
 
 const props = defineProps<{ round: Round }>();
 
