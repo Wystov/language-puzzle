@@ -1,30 +1,40 @@
 <template>
-  <p class="mt-10 p-2 text-center bg-slate-500 rounded-md">
+  <p class="mt-10 rounded-md bg-slate-500 p-2 text-center">
     {{ textToTranslate }}
   </p>
   <PlaygroundPuzzleRow
     v-if="pickFrom.length"
     :words="pickFrom"
-    @move-word="moveWord"
     class="mt-3"
-    isActive
+    is-active
+    @move-word="moveWord"
   />
-  <div v-else class="flex justify-center gap-2 mt-5">
+  <div v-else class="mt-5 flex justify-center gap-2">
     <button
+      class="rounded px-2 py-1"
+      :class="[
+        isRowSolved
+          ? 'bg-green-500 hover:bg-green-600'
+          : 'bg-slate-700 hover:bg-slate-600',
+      ]"
       @click="isRowSolved ? nextRow() : checkRow()"
-      class="px-2 py-1 rounded"
-      :class="[isRowSolved ? 'bg-green-500 hover:bg-green-600' : 'bg-slate-700 hover:bg-slate-600']"
     >
       {{ isRowSolved ? 'Continue' : 'Check' }}
     </button>
   </div>
-  <div class="flex flex-col mt-5 w-full bg-slate-600">
+  <div class="mt-5 flex w-full flex-col bg-slate-600">
     <template v-for="(phrase, i) in round.words" :key="phrase.id">
       <PlaygroundPuzzleRow
-        :words="i < currentIndex ? phrase.textExample.split(' ') : i === currentIndex ? result : []"
-        @move-word="moveWord"
-        :isActive="i === currentIndex"
+        :words="
+          i < currentIndex
+            ? phrase.textExample.split(' ')
+            : i === currentIndex
+              ? result
+              : []
+        "
+        :is-active="i === currentIndex"
         reverse
+        @move-word="moveWord"
       />
     </template>
   </div>
@@ -36,7 +46,7 @@ import { shuffle } from '~/utils/shuffleArray';
 
 const props = defineProps<{ round: Round }>();
 
-const emits = defineEmits(['nextRound']);
+// const emits = defineEmits(['nextRound']);
 
 const currentIndex = ref(0);
 
@@ -44,9 +54,9 @@ const currentPhrase = computed(() => {
   return props.round.words[currentIndex.value];
 });
 
-const phraseCount = computed(() => {
-  return props.round.words.length;
-});
+// const phraseCount = computed(() => {
+//   return props.round.words.length;
+// });
 
 const textToTranslate = computed(() => {
   return currentPhrase.value.textExampleTranslate;
@@ -73,10 +83,11 @@ const moveWord = (i: number, reverse?: boolean) => {
 };
 
 const isRowSolved = ref(false);
-const isPuzzleSolved = ref(false);
+// const isPuzzleSolved = ref(false);
 
 const checkRow = () => {
-  if (result.value.join(' ') === currentPhrase.value.textExample) isRowSolved.value = true;
+  if (result.value.join(' ') === currentPhrase.value.textExample)
+    isRowSolved.value = true;
 };
 
 const nextRow = () => {
@@ -86,8 +97,8 @@ const nextRow = () => {
   return;
 };
 
-const nextRound = () => {
-  isPuzzleSolved.value = false;
-  emits('nextRound');
-};
+// const nextRound = () => {
+//   isPuzzleSolved.value = false;
+//   emits('nextRound');
+// };
 </script>

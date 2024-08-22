@@ -17,8 +17,8 @@
         </ul>
       </nav>
       <button
-        @click="logout"
         class="px-2 py-1 bg-slate-700 rounded hover:bg-slate-600"
+        @click="logout"
       >
         Logout
       </button>

@@ -1,7 +1,7 @@
 <template>
   <h1 class="text-3xl">Hi, what's your name?</h1>
   <form @submit.prevent="submitInput">
-    <input v-model.trim="name" class="rounded mt-4 mr-2 p-2 text-black" />
+    <input v-model.trim="name" class="rounded mt-4 mr-2 p-2 text-black" >
     <button
       type="submit"
       class="rounded bg-green-500 px-3 py-2 uppercase hover:bg-green-600"
