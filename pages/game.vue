@@ -1,14 +1,30 @@
 <template>
   <main>
     <span>Level: </span>
-    <select v-model="currentLevel" class="text-black mr-4 mt-10">
-      <option v-for="i in lvlCount" :key="i" :value="i">{{ i }}</option>
+    <select
+      v-model="currentLevel"
+      class="mr-4 mt-10 text-black"
+    >
+      <option
+        v-for="i in lvlCount"
+        :key="i"
+        :value="i"
+      >
+        {{ i }}
+      </option>
     </select>
     <div v-if="pending">Loading...</div>
     <template v-else-if="data">
       <span>Round: </span>
-      <select v-model="currentRound" class="text-black">
-        <option v-for="i in data.roundsCount" :key="i" :value="i">
+      <select
+        v-model="currentRound"
+        class="text-black"
+      >
+        <option
+          v-for="i in data.roundsCount"
+          :key="i"
+          :value="i"
+        >
           {{ i }}
         </option>
       </select>
@@ -22,33 +38,33 @@
 </template>
 
 <script setup lang="ts">
-import type { Data } from "~/config/types";
-import { dataPath, lvlCount } from "~/config/constants";
+  import type { Data } from '~/config/types';
+  import { dataPath, lvlCount } from '~/config/constants';
 
-definePageMeta({
-  middleware: "auth",
-});
+  definePageMeta({
+    middleware: 'auth',
+  });
 
-const currentLevel = ref(1);
-const currentRound = ref(1);
+  const currentLevel = ref(1);
+  const currentRound = ref(1);
 
-const path = computed(
-  () => `${dataPath}/wordCollectionLevel${currentLevel.value}.json`
-);
+  const path = computed(
+    () => `${dataPath}/wordCollectionLevel${currentLevel.value}.json`
+  );
 
-const { data, pending } = await useLazyFetch(path, {
-  transform: (data: string): Data => JSON.parse(data),
-});
+  const { data, pending } = await useLazyFetch(path, {
+    transform: (data: string): Data => JSON.parse(data),
+  });
 
-const nextRound = () => {
-  if (
-    currentRound.value === data.value?.roundsCount &&
-    currentLevel.value < lvlCount
-  ) {
-    currentLevel.value++;
-    currentRound.value = 1;
-    return;
-  }
-  currentRound.value++;
-};
+  const nextRound = () => {
+    if (
+      currentRound.value === data.value?.roundsCount &&
+      currentLevel.value < lvlCount
+    ) {
+      currentLevel.value++;
+      currentRound.value = 1;
+      return;
+    }
+    currentRound.value++;
+  };
 </script>

@@ -1,4 +1,6 @@
 // @ts-check
 import { createConfigForNuxt } from '@nuxt/eslint-config/flat';
 
-export default createConfigForNuxt();
+export default createConfigForNuxt().overrideRules({
+  'vue/html-self-closing': 'off',
+});
