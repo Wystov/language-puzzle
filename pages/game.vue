@@ -12,7 +12,10 @@
           {{ i }}
         </option>
       </select>
-      <Playground :round="data.rounds[currentRound - 1]" />
+      <Playground
+        :round="data.rounds[currentRound - 1]"
+        @next-round="nextRound"
+      />
     </template>
     <div v-else>Failed to get game data</div>
   </main>
@@ -36,5 +39,16 @@ const path = computed(
 const { data, pending } = await useLazyFetch(path, {
   transform: (data: string): Data => JSON.parse(data),
 });
+
+const nextRound = () => {
+  if (
+    currentRound.value === data.value?.roundsCount &&
+    currentLevel.value < lvlCount
+  ) {
+    currentLevel.value++;
+    currentRound.value = 1;
+    return;
+  }
+  currentRound.value++;
+};
 </script>
-~/constants/constants

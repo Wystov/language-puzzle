@@ -1,19 +1,24 @@
 <template>
-  <draggable tag="div" :list="words" item-key="word" class="flex" group="words">
+  <draggable v-if="!isSolved" tag="div" :list="words" item-key="word" class="flex" group="words">
     <template #item="{ element: word, index }">
       <div class="p-2 cursor-pointer" @click="moveWord(index, reverse)">
         {{ word }}
       </div>
     </template>
   </draggable>
+  <div v-else class="flex">
+    <div v-for="word in words" :key="word" class="p-2">
+      {{ word }}
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import draggable from "vuedraggable";
+import draggable from 'vuedraggable';
 
-defineProps<{ words: string[]; reverse?: boolean }>();
+defineProps<{ words: string[]; reverse?: boolean; isSolved?: boolean }>();
 
-const emit = defineEmits(["moveWord"]);
+const emit = defineEmits(['moveWord']);
 
-const moveWord = (i: number, reverse?: boolean) => emit("moveWord", i, reverse);
+const moveWord = (i: number, reverse?: boolean) => emit('moveWord', i, reverse);
 </script>
