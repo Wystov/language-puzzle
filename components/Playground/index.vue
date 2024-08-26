@@ -52,17 +52,13 @@
 
   const props = defineProps<{ round: Round }>();
 
-  // const emits = defineEmits(['nextRound']);
+  const emits = defineEmits(['nextRound']);
 
   const currentIndex = ref(0);
 
   const currentPhrase = computed(() => {
     return props.round.words[currentIndex.value];
   });
-
-  // const phraseCount = computed(() => {
-  //   return props.round.words.length;
-  // });
 
   const textToTranslate = computed(() => {
     return currentPhrase.value.textExampleTranslate;
@@ -89,7 +85,6 @@
   };
 
   const isRowSolved = ref(false);
-  // const isPuzzleSolved = ref(false);
 
   const checkRow = () => {
     if (result.value.join(' ') === currentPhrase.value.textExample)
@@ -97,14 +92,17 @@
   };
 
   const nextRow = () => {
+    if (currentIndex.value === props.round.words.length - 1) {
+      nextRound();
+      return;
+    }
     isRowSolved.value = false;
     currentIndex.value++;
-    console.log('continue');
-    return;
   };
 
-  // const nextRound = () => {
-  //   isPuzzleSolved.value = false;
-  //   emits('nextRound');
-  // };
+  const nextRound = () => {
+    isRowSolved.value = false;
+    currentIndex.value = 0;
+    emits('nextRound');
+  };
 </script>
