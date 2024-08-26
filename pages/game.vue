@@ -1,33 +1,17 @@
 <template>
   <main>
-    <span>Level: </span>
-    <select
-      v-model="currentLevel"
-      class="mr-4 mt-10 text-black"
-    >
-      <option
-        v-for="i in lvlCount"
-        :key="i"
-        :value="i"
-      >
-        {{ i }}
-      </option>
-    </select>
     <div v-if="pending">Loading...</div>
     <template v-else-if="data">
-      <span>Round: </span>
-      <select
+      <UiNumericSelect
+        v-model="currentLevel"
+        label="Level"
+        :max="lvlCount"
+      />
+      <UiNumericSelect
         v-model="currentRound"
-        class="text-black"
-      >
-        <option
-          v-for="i in data.roundsCount"
-          :key="i"
-          :value="i"
-        >
-          {{ i }}
-        </option>
-      </select>
+        label="Round"
+        :max="data.roundsCount"
+      />
       <Playground
         :round="data.rounds[currentRound - 1]"
         @next-round="nextRound"
