@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
   import type { Data } from '~/config/types';
-  import { dataPath, lvlCount } from '~/config/constants';
+  import { contentPath, contentType, lvlCount } from '~/config/constants';
 
   definePageMeta({
     middleware: 'auth',
@@ -32,11 +32,12 @@
   const currentLevel = ref(1);
   const currentRound = ref(1);
 
-  const path = computed(
-    () => `${dataPath}/wordCollectionLevel${currentLevel.value}.json`
+  const dataPath = computed(
+    () =>
+      `${contentPath}/${contentType.data}/wordCollectionLevel${currentLevel.value}.json`
   );
 
-  const { data, pending } = await useLazyFetch(path, {
+  const { data, pending } = await useLazyFetch(dataPath, {
     transform: (data: string): Data => JSON.parse(data),
   });
 

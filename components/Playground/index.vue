@@ -21,7 +21,12 @@
       {{ isRowSolved ? 'Continue' : 'Check' }}
     </button>
   </div>
-  <div class="mt-5 flex w-full flex-col bg-slate-600">
+  <div
+    class="mt-5 flex w-full flex-col bg-cover"
+    :style="{
+      backgroundImage: 'url(' + bgImgUrl + ')',
+    }"
+  >
     <template
       v-for="(phrase, i) in round.words"
       :key="phrase.id"
@@ -44,12 +49,17 @@
 </template>
 
 <script setup lang="ts">
+  import { contentPath, contentType } from '~/config/constants';
   import type { moveWordType, Round } from '~/config/types';
   import { shuffle } from '~/utils/shuffleArray';
 
   const props = defineProps<{ round: Round }>();
 
   const emits = defineEmits(['nextRound']);
+
+  const bgImgUrl = computed(() => {
+    return `${contentPath}/${contentType.images}/${props.round.levelData.imageSrc}`;
+  });
 
   const currentIndex = ref(0);
 
