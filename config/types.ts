@@ -25,3 +25,24 @@ export type Data = {
   rounds: Round[];
   roundsCount: number;
 };
+
+export type DragType = {
+  added?: {
+    element: string;
+    newIndex: number;
+  };
+  removed?: {
+    element: string;
+    oldIndex: number;
+  };
+};
+
+export type moveWordType = ({
+  i,
+  reverse,
+  drag,
+}: {
+  i: number;
+  reverse?: boolean;
+  drag?: DragType;
+}) => void;

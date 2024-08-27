@@ -3,16 +3,12 @@
     {{ textToTranslate }}
   </p>
   <PlaygroundPuzzleRow
-    v-if="pickFrom.length"
     :words="pickFrom"
     class="mt-3"
     is-active
     @move-word="moveWord"
   />
-  <div
-    v-else
-    class="mt-5 flex justify-center gap-2"
-  >
+  <div class="mt-5 flex justify-center gap-2">
     <button
       class="rounded px-2 py-1"
       :class="[
@@ -40,6 +36,7 @@
         "
         :is-active="i === currentIndex"
         reverse
+        :class="[i > currentIndex ? 'backdrop-blur-[2px]' : '']"
         @move-word="moveWord"
       />
     </template>
@@ -47,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { Round } from '~/config/types';
+  import type { moveWordType, Round } from '~/config/types';
   import { shuffle } from '~/utils/shuffleArray';
 
   const props = defineProps<{ round: Round }>();
@@ -70,18 +67,37 @@
 
   const pickFrom = ref([...words.value]);
 
-  const result = ref<string[]>([]);
+  const result = ref<string[]>(Array(words.value.length).fill(''));
 
   watch(words, () => {
     pickFrom.value = [...words.value];
-    result.value = [];
+    result.value = Array(words.value.length).fill('');
   });
 
-  const moveWord = (i: number, reverse?: boolean) => {
-    const from = reverse ? result.value : pickFrom.value;
-    const to = reverse ? pickFrom.value : result.value;
-    const word = from.splice(i, 1)[0];
-    to.push(word);
+  const moveWord: moveWordType = ({ i, reverse, drag }) => {
+    const from = reverse ? result : pickFrom;
+    const to = reverse ? pickFrom : result;
+
+    if (drag) {
+      if (drag?.added) {
+        let index = drag.added.newIndex;
+        let word = from.value[index];
+        while (word.length) {
+          index = index === from.value.length - 1 ? 0 : index + 1;
+          word = from.value[index];
+        }
+        from.value.splice(index, 1);
+      }
+      if (drag?.removed) {
+        from.value.splice(drag.removed.oldIndex, 0, '');
+      }
+      return;
+    }
+
+    const word = from.value[i];
+    if (!word.length) return;
+    from.value.splice(i, 1, '');
+    to.value.splice(to.value.indexOf(''), 1, word);
   };
 
   const isRowSolved = ref(false);

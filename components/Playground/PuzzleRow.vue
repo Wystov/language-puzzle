@@ -4,13 +4,14 @@
     tag="div"
     :list="words"
     item-key="word"
-    :class="`flex h-10 ${reverse ? 'bg-slate-400' : 'bg-transparent'}`"
+    :class="`flex h-10 ${reverse ? 'outline -outline-offset-2' : ''}`"
     group="words"
+    @change="handleDragEnd"
   >
     <template #item="{ element: word, index }">
       <div
-        class="cursor-pointer p-2"
-        @click="moveWord(index, reverse)"
+        :class="`grow cursor-pointer ${word.length ? 'border-2' : ''} p-2 text-center`"
+        @click="moveWord({ i: index, reverse })"
       >
         {{ word }}
       </div>
@@ -23,7 +24,7 @@
     <div
       v-for="word in words"
       :key="word"
-      class="p-2"
+      class="grow border-2 p-2 text-center"
     >
       {{ word }}
     </div>
@@ -32,11 +33,25 @@
 
 <script setup lang="ts">
   import draggable from 'vuedraggable';
+  import type { DragType, moveWordType } from '~/config/types';
 
-  defineProps<{ words: string[]; reverse?: boolean; isActive?: boolean }>();
+  const props = defineProps<{
+    words: string[];
+    reverse?: boolean;
+    isActive?: boolean;
+  }>();
 
   const emit = defineEmits(['moveWord']);
 
-  const moveWord = (i: number, reverse?: boolean) =>
-    emit('moveWord', i, reverse);
+  const moveWord: moveWordType = (options) => {
+    emit('moveWord', options);
+  };
+
+  const handleDragEnd = (drag: DragType) => {
+    moveWord({
+      i: drag.removed?.oldIndex ?? -1,
+      reverse: props.reverse,
+      drag,
+    });
+  };
 </script>
