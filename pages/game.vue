@@ -1,7 +1,7 @@
 <template>
   <main>
-    <div v-if="pending">Loading...</div>
-    <template v-else-if="data">
+    <div v-if="status === 'pending'">Loading...</div>
+    <template v-else-if="status === 'success' && data">
       <UiNumericSelect
         v-model="currentLevel"
         label="Level"
@@ -17,7 +17,7 @@
         @next-round="nextRound"
       />
     </template>
-    <div v-else>Failed to get game data</div>
+    <div v-else-if="status === 'error'">Failed to get game data</div>
   </main>
 </template>
 
@@ -37,7 +37,7 @@
       `${contentPath}/${contentType.data}/wordCollectionLevel${currentLevel.value}.json`
   );
 
-  const { data, pending } = await useLazyFetch(dataPath, {
+  const { data, status } = await useLazyFetch(dataPath, {
     transform: (data: string): Data => JSON.parse(data),
   });
 
